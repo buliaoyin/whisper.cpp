@@ -39,10 +39,6 @@ func (p *Params) SetPrintProgress(v bool) {
 	p.print_progress = toBool(v)
 }
 
-func (p *Params) SetPrintRealtime(v bool) {
-	p.print_realtime = toBool(v)
-}
-
 func (p *Params) SetPrintTimestamps(v bool) {
 	p.print_timestamps = toBool(v)
 }
@@ -123,6 +119,11 @@ func (p *Params) SetAudioCtx(n int) {
 	p.audio_ctx = C.int(n)
 }
 
+// Set initial prompt
+func (p *Params) SetInitialPrompt(prompt string) {
+	p.initial_prompt = C.CString(prompt)
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 // PRIVATE METHODS
 
@@ -147,6 +148,7 @@ func (p *Params) String() string {
 	str += fmt.Sprintf(" offset_ms=%d", p.offset_ms)
 	str += fmt.Sprintf(" duration_ms=%d", p.duration_ms)
 	str += fmt.Sprintf(" audio_ctx=%d", p.audio_ctx)
+	str += fmt.Sprintf(" initial_prompt=%s", C.GoString(p.initial_prompt))
 	if p.translate {
 		str += " translate"
 	}
@@ -161,9 +163,6 @@ func (p *Params) String() string {
 	}
 	if p.print_progress {
 		str += " print_progress"
-	}
-	if p.print_realtime {
-		str += " print_realtime"
 	}
 	if p.print_timestamps {
 		str += " print_timestamps"
